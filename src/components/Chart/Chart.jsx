@@ -5,6 +5,7 @@ import { Line, Bar } from 'react-chartjs-2'
 import styles from './Chart.module.css'
 
 const Chart = ({ data:{confirmed,recovered,deaths}, country }) => {
+	const options = {  year: 'numeric', month: 'short', day: 'numeric' };
 	const [dailyData, setDailyData] = useState([])
 
 	useEffect(() => {
@@ -17,7 +18,7 @@ const Chart = ({ data:{confirmed,recovered,deaths}, country }) => {
 	const lineChart = dailyData.length ? (
 		<Line
 			data={{
-				labels: dailyData.map(({ date }) => date).reverse(),
+				labels: dailyData.map(({ date }) => new Date(date).toLocaleDateString(undefined,options)).reverse(),
 				datasets: [
 					{
 						data: dailyData
@@ -28,6 +29,13 @@ const Chart = ({ data:{confirmed,recovered,deaths}, country }) => {
 						fill: true,
 					},
 					{
+						data: dailyData.map((data) => data.recovered),
+						label: 'Recovered',
+						borderColor: 'green',
+						backgroundColor: 'rgba(0, 255, 0, 0.5)',
+						fill: true,
+					},
+					{
 						data: dailyData.map(({ deaths }) => deaths).reverse(),
 						label: 'Deaths',
 						borderColor: 'red',
@@ -35,6 +43,9 @@ const Chart = ({ data:{confirmed,recovered,deaths}, country }) => {
 						fill: true,
 					},
 				],
+			}}
+			options={{
+				responsive: true,
 			}}
 		/>
 	) : null
@@ -56,6 +67,7 @@ const Chart = ({ data:{confirmed,recovered,deaths}, country }) => {
 				],
 			}}
 			options={{
+				responsive: true,
 				legend: { display: false },
 				title: { display: true, text: `Current state in ${country}` },
 			}}
