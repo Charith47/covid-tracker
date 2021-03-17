@@ -7,3 +7,9 @@
 	width: 85%;
 	height: fit-content;
 }
+
+@media (max-width: 720px){
+	.container{
+		display: none;	
+	}
+}
